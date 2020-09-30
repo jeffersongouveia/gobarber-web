@@ -40,7 +40,10 @@
 
     "react/no-unescaped-entities": "off",
     "react/jsx-one-expression-per-line": "off",
+    "react/jsx-props-no-spreading": "off",
     "react-hooks/rules-of-hooks": "error",
+    "react/destructuring-assignment": "off",
+    "react/prop-types": "off",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
       1,
