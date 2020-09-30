@@ -64,6 +64,8 @@
       }
     ],
 
+    "object-curly-newline": ["error", {"minProperties": 5}],
+
     "semi": [
       "error",
       "never"
