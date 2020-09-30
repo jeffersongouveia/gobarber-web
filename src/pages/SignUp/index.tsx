@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Form } from '@unform/web'
+
 import { FiUser, FiMail, FiLock, FiArrowLeft } from 'react-icons/fi'
 
 import Input from '../../components/Input'
@@ -11,6 +13,10 @@ import logo from '../../assets/logo.svg'
 const SignUp: React.FC = () => {
   const [buttonSelected, setButtonSelected] = useState('client')
 
+  function handleSubmit(data: object): void {
+    console.log(data)
+  }
+
   return (
     <Container>
       <Background />
@@ -18,7 +24,7 @@ const SignUp: React.FC = () => {
       <Content>
         <img src={logo} alt="GoBarber" />
 
-        <form>
+        <Form onSubmit={handleSubmit}>
           <FormHeader>
             <button
               type="button"
@@ -49,7 +55,7 @@ const SignUp: React.FC = () => {
           />
 
           <Button type="submit">Cadastrar</Button>
-        </form>
+        </Form>
 
         <a href="/">
           <FiArrowLeft />

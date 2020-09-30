@@ -64,7 +64,7 @@
       }
     ],
 
-    "object-curly-newline": ["error", {"minProperties": 5}],
+    "object-curly-newline": ["error", { "multiline": true }],
 
     "semi": [
       "error",
