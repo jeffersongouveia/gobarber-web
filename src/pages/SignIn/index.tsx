@@ -1,10 +1,10 @@
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { FiMail, FiLock, FiLogIn } from 'react-icons/fi'
 import { Form } from '@unform/web'
 import { FormHandles } from '@unform/core'
 import * as Yup from 'yup'
 
-import { AuthContext } from '../../context/AuthContext'
+import { useAuth } from '../../hooks/AuthContext'
 import getValidationErrors from '../../utils/getValidationErrors'
 
 import Input from '../../components/Input'
@@ -20,7 +20,7 @@ interface FormProps {
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
-  const { signIn } = useContext(AuthContext)
+  const { signIn } = useAuth()
 
   const handleSubmit = useCallback(
     async (data: FormProps) => {
