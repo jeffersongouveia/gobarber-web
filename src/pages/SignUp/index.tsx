@@ -10,7 +10,6 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 
 import { Container, Background, Content, FormHeader } from './styles'
-
 import logo from '../../assets/logo.svg'
 
 const SignUp: React.FC = () => {
