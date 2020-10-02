@@ -9,14 +9,12 @@ interface ToastContainerProps {
   messages: ToastMessage[]
 }
 
-const ToastContainer: React.FC<ToastContainerProps> = (props) => {
-  return (
-    <Container>
-      {props.messages.map((message) => (
-        <Toast key={message.id} toast={message} />
-      ))}
-    </Container>
-  )
-}
+const ToastContainer: React.FC<ToastContainerProps> = (props) => (
+  <Container>
+    {props.messages.map((message) => (
+      <Toast key={message.id} toast={message} />
+    ))}
+  </Container>
+)
 
 export default ToastContainer

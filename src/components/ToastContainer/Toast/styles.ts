@@ -60,8 +60,8 @@ export const Container = styled.div<ContainerProps>`
     color: inherit;
   }
 
-  ${(props) => !props.hasDescription &&
-    css`
+  ${(props) => !props.hasDescription
+    && css`
       align-items: center;
 
       svg {

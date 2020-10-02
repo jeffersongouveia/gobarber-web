@@ -7,8 +7,6 @@
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint",
     "airbnb"
   ],
 
@@ -24,7 +22,6 @@
   "plugins": [
     "react",
     "react-hooks",
-    "prettier",
     "@typescript-eslint"
   ],
 
@@ -35,8 +32,6 @@
         "allowExpressions": true
       }
     ],
-
-    "prettier/prettier": "error",
 
     "react/no-unescaped-entities": "off",
     "react/jsx-one-expression-per-line": "off",
