@@ -26,7 +26,7 @@ interface AuthContextProps {
 }
 
 const initialValue = {} as AuthContextProps
-export const AuthContext = createContext<AuthContextProps>(initialValue)
+export const Auth = createContext<AuthContextProps>(initialValue)
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [session, setSession] = useState<SessionResponse>(() => {
@@ -56,14 +56,14 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user: session.user, signIn, signOut }}>
+    <Auth.Provider value={{ user: session.user, signIn, signOut }}>
       {children}
-    </AuthContext.Provider>
+    </Auth.Provider>
   )
 }
 
 export function useAuth(): AuthContextProps {
-  const context = useContext(AuthContext)
+  const context = useContext(Auth)
 
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
