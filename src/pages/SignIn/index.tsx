@@ -34,8 +34,8 @@ const SignIn: React.FC = () => {
 
         const schema = Yup.object().shape({
           email: Yup.string()
-            .required('E-mail is required')
-            .email('Use a valid e-mail'),
+            .required('Email is required')
+            .email('Use a valid email'),
           password: Yup.string().required('Password is required'),
         })
 
@@ -70,7 +70,7 @@ const SignIn: React.FC = () => {
         <Form ref={formRef} onSubmit={handleSubmit}>
           <h1>Log In</h1>
 
-          <Input name="email" icon={FiMail} type="text" placeholder="E-mail" />
+          <Input name="email" icon={FiMail} type="text" placeholder="Email" />
 
           <Input
             name="password"
