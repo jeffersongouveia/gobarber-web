@@ -32,7 +32,7 @@ const Toast: React.FC<ToastProps> = ({ toast, style }) => {
       key={toast.id}
       style={style}
       type={toast.type}
-      hasDescription={!!toast.description}
+      $hasDescription={!!toast.description}
     >
       {icons[toast.type || 'info']}
 
