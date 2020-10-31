@@ -1,11 +1,10 @@
 import React, { useCallback, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { FiMail, FiLock, FiLogIn } from 'react-icons/fi'
+import { FiMail, FiLogIn } from 'react-icons/fi'
 import { Form } from '@unform/web'
 import { FormHandles } from '@unform/core'
 import * as Yup from 'yup'
 
-import { useAuth } from '../../hooks/auth'
 import { useToast } from '../../hooks/toast'
 import getValidationErrors from '../../utils/getValidationErrors'
 
@@ -17,14 +16,12 @@ import logo from '../../assets/logo.svg'
 
 interface FormProps {
   email: string
-  password: string
 }
 
-const SignIn: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
 
-  const { signIn } = useAuth()
   const { addToast } = useToast()
 
   const handleSubmit = useCallback(
@@ -36,14 +33,11 @@ const SignIn: React.FC = () => {
           email: Yup.string()
             .required('E-mail is required')
             .email('Use a valid e-mail'),
-          password: Yup.string().required('Password is required'),
         })
 
         await schema.validate(data, { abortEarly: false })
-        await signIn({
-          email: data.email,
-          password: data.password,
-        })
+        // Reset password
+
         history.push('/')
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -55,11 +49,11 @@ const SignIn: React.FC = () => {
         addToast({
           type: 'error',
           title: 'Error',
-          description: 'There was an error signing in, check the values entered',
+          description: 'There was an error in the process, please try again',
         })
       }
     },
-    [signIn, addToast, history],
+    [addToast, history],
   )
 
   return (
@@ -68,27 +62,16 @@ const SignIn: React.FC = () => {
         <img src={logo} alt="GoBarber" />
 
         <Form ref={formRef} onSubmit={handleSubmit}>
-          <h1>Log In</h1>
+          <h1>Recover my account</h1>
 
           <Input name="email" icon={FiMail} type="text" placeholder="E-mail" />
 
-          <Input
-            name="password"
-            icon={FiLock}
-            type="password"
-            placeholder="Password"
-          />
-
-          <Button type="submit">Log In</Button>
-
-          <Link to="/forgot-password">
-            I forgot my password
-          </Link>
+          <Button type="submit">Recover</Button>
         </Form>
 
         <Link to="/sign-up">
           <FiLogIn />
-          Sign Up
+          Back to log in
         </Link>
       </Content>
 
@@ -97,4 +80,4 @@ const SignIn: React.FC = () => {
   )
 }
 
-export default SignIn
+export default ForgotPassword
