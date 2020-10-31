@@ -34,9 +34,9 @@ const SignIn: React.FC = () => {
 
         const schema = Yup.object().shape({
           email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Use um e-mail válido'),
-          password: Yup.string().required('Senha obrigatória'),
+            .required('E-mail is required')
+            .email('Use a valid e-mail'),
+          password: Yup.string().required('Password is required'),
         })
 
         await schema.validate(data, { abortEarly: false })
@@ -54,8 +54,8 @@ const SignIn: React.FC = () => {
 
         addToast({
           type: 'error',
-          title: 'Erro na autenticação',
-          description: 'Ocorreu um erro ao fazer login, confira os valores informados',
+          title: 'Error',
+          description: 'There was an error signing in, check the values entered',
         })
       }
     },
@@ -68,7 +68,7 @@ const SignIn: React.FC = () => {
         <img src={logo} alt="GoBarber" />
 
         <Form ref={formRef} onSubmit={handleSubmit}>
-          <h1>Faça o seu login</h1>
+          <h1>Log In</h1>
 
           <Input name="email" icon={FiMail} type="text" placeholder="E-mail" />
 
@@ -76,17 +76,17 @@ const SignIn: React.FC = () => {
             name="password"
             icon={FiLock}
             type="password"
-            placeholder="Senha"
+            placeholder="Password"
           />
 
-          <Button type="submit">Entrar</Button>
+          <Button type="submit">Log In</Button>
 
-          <a href="/">Esqueci minha senha</a>
+          <a href="/">I forgot my password</a>
         </Form>
 
         <Link to="/sign-up">
           <FiLogIn />
-          Criar conta
+          Sign Up
         </Link>
       </Content>
 

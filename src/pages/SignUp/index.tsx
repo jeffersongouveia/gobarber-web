@@ -33,11 +33,11 @@ const SignUp: React.FC = () => {
       formRef.current?.setErrors({})
 
       const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório'),
+        name: Yup.string().required('Name is required'),
         email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Use um e-mail válido'),
-        password: Yup.string().min(6, 'No mínimo 6 caracteres'),
+          .required('E-mail is required')
+          .email('Use a valid e-mail'),
+        password: Yup.string().min(6, 'At least 6 characters'),
       })
 
       await schema.validate(data, { abortEarly: false })
@@ -45,8 +45,8 @@ const SignUp: React.FC = () => {
       await api.post('/users', data)
       addToast({
         type: 'success',
-        title: 'Cadastro realizado',
-        description: 'Você já pode fazer seu login',
+        title: 'Success',
+        description: 'You can now log in',
       })
       history.push('/sign-in')
     } catch (error) {
@@ -58,8 +58,8 @@ const SignUp: React.FC = () => {
 
       addToast({
         type: 'error',
-        title: 'Erro no cadastro',
-        description: 'Ocorreu um erro ao fazer o cadastro, tente novamente',
+        title: 'Error',
+        description: 'An error occurred while registering, please try again',
       })
     }
   }, [addToast, history])
@@ -78,7 +78,7 @@ const SignUp: React.FC = () => {
               className={buttonSelected === 'client' ? 'selected' : ''}
               onClick={() => setButtonSelected('client')}
             >
-              Sou cliente
+              I'm client
             </button>
 
             <button
@@ -86,11 +86,11 @@ const SignUp: React.FC = () => {
               className={buttonSelected === 'barber' ? 'selected' : ''}
               onClick={() => setButtonSelected('barber')}
             >
-              Sou cabeleireiro
+              I'm a hairdresser
             </button>
           </FormHeader>
 
-          <Input name="name" icon={FiUser} type="text" placeholder="Nome" />
+          <Input name="name" icon={FiUser} type="text" placeholder="Name" />
 
           <Input name="email" icon={FiMail} type="text" placeholder="E-mail" />
 
@@ -98,15 +98,15 @@ const SignUp: React.FC = () => {
             name="password"
             icon={FiLock}
             type="password"
-            placeholder="Senha"
+            placeholder="Password"
           />
 
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit">Sign Up</Button>
         </Form>
 
         <Link to="/sign-in">
           <FiArrowLeft />
-          Voltar para o login
+          Go back to log in
         </Link>
       </Content>
     </Container>
