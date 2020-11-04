@@ -34,6 +34,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const user = sessionStorage.getItem('@GoBarber:user')
 
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`
       return { token, user: JSON.parse(user) }
     }
 
@@ -46,6 +47,8 @@ export const AuthProvider: React.FC = ({ children }) => {
     setSession(data)
     sessionStorage.setItem('@GoBarber:token', data.token)
     sessionStorage.setItem('@GoBarber:user', JSON.stringify(data.user))
+
+    api.defaults.headers.authorization = `Bearer ${data.token}`
   }, [])
 
   const signOut = useCallback(() => {
