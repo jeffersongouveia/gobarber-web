@@ -3,7 +3,18 @@ import { FiClock, FiPower } from 'react-icons/all'
 
 import { useAuth } from '../../hooks/auth'
 
-import { Calendar, Container, Content, Header, HeaderContent, NextAppointment, Profile, Schedule } from './styles'
+import {
+  Calendar,
+  Container,
+  Content,
+  Header,
+  HeaderContent,
+  NextAppointment,
+  Profile,
+  Schedule,
+  Section,
+  Appointment,
+} from './styles'
 import logo from '../../assets/logo.svg'
 
 const Dashboard: React.FC = () => {
@@ -53,6 +64,62 @@ const Dashboard: React.FC = () => {
               </span>
             </div>
           </NextAppointment>
+
+          <Section>
+            <strong>Morning</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                10:30
+              </span>
+
+              <div>
+                <img
+                  src="https://pbs.twimg.com/profile_images/1044170135810924544/BNPdZhsF_400x400.jpg"
+                  alt="Felipe Castanhari"
+                />
+
+                <strong>Felipe Castanhari</strong>
+              </div>
+            </Appointment>
+          </Section>
+
+          <Section>
+            <strong>Afternoon</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                13:00
+              </span>
+
+              <div>
+                <img
+                  src="https://pbs.twimg.com/profile_images/1322418289360789504/8Kk4LkcX_400x400.jpg"
+                  alt="Quinn Nelson"
+                />
+
+                <strong>Quinn Nelson</strong>
+              </div>
+            </Appointment>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                14:00
+              </span>
+
+              <div>
+                <img
+                  src="https://pbs.twimg.com/profile_images/892579870802190336/SmAuYdKy_400x400.jpg"
+                  alt="Lucas Vinícius"
+                />
+
+                <strong>Lucas Vinícius</strong>
+              </div>
+            </Appointment>
+          </Section>
         </Schedule>
 
         <Calendar />
