@@ -11,7 +11,7 @@ interface SessionUser {
   id: string
   name: string
   email: string
-  avatar: string
+  avatar_url: string
 }
 
 interface SessionResponse {

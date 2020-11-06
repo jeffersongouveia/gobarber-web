@@ -119,7 +119,7 @@ const Dashboard: React.FC = () => {
       .then(({ data }) => {
         const appointmentsFormatted = data.map((item) => ({
           ...item,
-          hour_formatted: format(parseISO(item.date), 'hh:mm'),
+          hour_formatted: format(parseISO(item.date), 'kk:mm'),
         }))
 
         setAppointments(appointmentsFormatted)
@@ -134,11 +134,11 @@ const Dashboard: React.FC = () => {
           <img src={logo} alt="GoBarber" />
 
           <Profile>
-            <img src="https://avatars2.githubusercontent.com/u/12664845?s=460&u=281dbbda2311796bc08b3529a069a39ed076f222&v=4" alt={user.name} />
+            <img src={user.avatar_url} alt={user.name} />
 
             <div>
               <span>Welcome</span>
-              <strong>Jeff Gouveia</strong>
+              <strong>{user.name}</strong>
             </div>
           </Profile>
 
