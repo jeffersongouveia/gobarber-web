@@ -23,6 +23,7 @@ interface AuthContextProps {
   user: SessionUser
   signIn(props: SignInProps): Promise<void>
   signOut(): void
+  updateUser(user: SessionUser): void
 }
 
 const initialValue = {} as AuthContextProps
@@ -58,8 +59,24 @@ export const AuthProvider: React.FC = ({ children }) => {
     sessionStorage.removeItem('@GoBarber:user')
   }, [])
 
+  const updateUser = useCallback((user: SessionUser) => {
+    sessionStorage.setItem('@GoBarber:user', JSON.stringify(user))
+
+    setSession({
+      user,
+      token: session.token,
+    })
+  }, [session.token])
+
   return (
-    <Auth.Provider value={{ user: session.user, signIn, signOut }}>
+    <Auth.Provider
+      value={{
+        user: session.user,
+        signIn,
+        signOut,
+        updateUser,
+      }}
+    >
       {children}
     </Auth.Provider>
   )

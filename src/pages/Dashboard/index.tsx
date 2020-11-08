@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiClock, FiPower } from 'react-icons/all'
 import DayPicker, { DayModifiers } from 'react-day-picker'
 import { isToday, format, parseISO, isAfter } from 'date-fns'
+import { Link } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/auth'
 
@@ -49,6 +50,7 @@ interface AppointmentItem {
 const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
 
+  // TODO: is getting the weekend as initial date
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [monthAvailability, setMonthAvailability] = useState<MonthAvailabilityItem[]>([])
@@ -139,11 +141,15 @@ const Dashboard: React.FC = () => {
           <img src={logo} alt="GoBarber" />
 
           <Profile>
-            <img src={user.avatar_url} alt={user.name} />
+            <Link to="/profile">
+              <img src={user.avatar_url} alt={user.name} />
+            </Link>
 
             <div>
               <span>Welcome</span>
-              <strong>{user.name}</strong>
+              <Link to="/profile">
+                <strong>{user.name}</strong>
+              </Link>
             </div>
           </Profile>
 

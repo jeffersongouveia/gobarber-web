@@ -56,6 +56,14 @@ export const Profile = styled.div`
       color: #FF9000;
     }
   }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 `
 
 export const Content = styled.main`
