@@ -19,9 +19,16 @@ import { AvatarInput, Container, Content } from './styles'
 interface ProfileFormData {
   name: string
   email: string
-  old_password: string
-  password: string
-  password_confirmation: string
+  current_password: string
+  new_password: string
+  new_password_confirmation: string
+}
+
+interface ProfileUser {
+  id: string
+  name: string
+  email: string
+  avatar_url: string
 }
 
 const Profile: React.FC = () => {
@@ -77,26 +84,23 @@ const Profile: React.FC = () => {
 
       await schema.validate(data, { abortEarly: false })
 
-      const { name, email, old_password, password, password_confirmation } = data
+      const { current_password, new_password, new_password_confirmation } = data
+      const passwordFields = data.current_password
+        ? { current_password, new_password, new_password_confirmation }
+        : {}
+
       const formData = {
-        name,
-        email,
-        ...(old_password
-          ? {
-            old_password,
-            password,
-            password_confirmation,
-          }
-          : {}
-        ),
+        name: data.name,
+        email: data.email,
+        ...passwordFields,
       }
-      const profileUpdated = await api.put('/profile', formData)
-      console.log(profileUpdated)
+      const { data: profile } = await api.put<ProfileUser>('/profile', formData)
+      updateUser(profile)
 
       addToast({
         type: 'success',
-        title: 'Success',
-        description: 'You can now log in',
+        title: 'Profile updated',
+        description: 'You profile was updated successfully',
       })
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
@@ -107,11 +111,11 @@ const Profile: React.FC = () => {
 
       addToast({
         type: 'error',
-        title: 'Error',
-        description: 'An error occurred while registering, please try again',
+        title: 'Failed to update',
+        description: 'An error occurred while updating your profile, please try again later',
       })
     }
-  }, [addToast])
+  }, [addToast, updateUser])
 
   return (
     <Container>
