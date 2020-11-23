@@ -12,6 +12,7 @@ interface SessionUser {
   name: string
   email: string
   avatar_url: string
+  is_hairstyle: boolean
 }
 
 interface SessionResponse {

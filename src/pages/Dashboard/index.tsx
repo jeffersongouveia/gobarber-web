@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/auth'
 
 import Appointments from '../Appointments'
+import Hairstylists from '../Hairstylists'
 
 import { Container, Content, Header, HeaderContent, Profile } from './styles'
 import 'react-day-picker/lib/style.css'
@@ -40,7 +41,7 @@ const Dashboard: React.FC = () => {
       </Header>
 
       <Content>
-        <Appointments />
+        {user.is_hairstyle ? <Appointments /> : <Hairstylists />}
       </Content>
     </Container>
   )

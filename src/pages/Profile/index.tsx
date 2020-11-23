@@ -29,6 +29,7 @@ interface ProfileUser {
   name: string
   email: string
   avatar_url: string
+  is_hairstyle: boolean
 }
 
 const Profile: React.FC = () => {
