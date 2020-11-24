@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { format, isAfter, isToday, parseISO } from 'date-fns'
 import { FiClock } from 'react-icons/all'
-import DayPicker, { DayModifiers } from 'react-day-picker'
+import { DayModifiers } from 'react-day-picker'
 
+import Calendar from '../../components/Calendar'
 import { useAuth } from '../../hooks/auth'
 import api from '../../services/api'
 
-import { Appointment, Calendar, NextAppointment, Schedule, Section } from './styles'
+import { Appointment, NextAppointment, Schedule, Section } from './styles'
 
 interface MonthAvailabilityItem {
   day: number
@@ -201,16 +202,12 @@ const Appointments: React.FC = () => {
         </Section>
       </Schedule>
 
-      <Calendar>
-        <DayPicker
-          fromMonth={new Date()}
-          disabledDays={[{ daysOfWeek: [0, 6] }, ...disabledDays]}
-          modifiers={{ available: { daysOfWeek: [1, 2, 3, 4, 5] } }}
-          selectedDays={selectedDate}
-          onDayClick={handleChangeDate}
-          onMonthChange={handleMonthChange}
-        />
-      </Calendar>
+      <Calendar
+        selectedDays={selectedDate}
+        disabledDays={disabledDays}
+        onDayClick={handleChangeDate}
+        onMonthChange={handleMonthChange}
+      />
     </>
   )
 }

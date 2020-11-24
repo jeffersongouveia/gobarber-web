@@ -66,6 +66,8 @@
       "never"
     ],
 
+    "max-len": ["error", { "code": 160 }],
+
     "camelcase": "off",
     "no-console": "off",
     "no-use-before-define": "off",
