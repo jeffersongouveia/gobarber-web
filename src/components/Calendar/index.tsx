@@ -4,7 +4,7 @@ import DayPicker, { DayModifiers } from 'react-day-picker'
 import { Container } from './styles'
 
 interface CalendarProps {
-  selectedDays: Date
+  selectedDays: Date | undefined
   disabledDays: Date[]
   onDayClick(day: Date, modifiers: DayModifiers): void
   onMonthChange(month: Date): void

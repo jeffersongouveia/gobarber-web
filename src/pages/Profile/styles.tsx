@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { shade } from 'polished'
 
+import colors from '../../styles/colors'
+
 export const Container = styled.div`
   > header {
     height: 144px;
@@ -90,7 +92,7 @@ export const AvatarInput = styled.div`
     svg {
       width: 20px;
       height: 20px;
-      color: #312e38;
+      color: ${colors.background};
     }
 
     &:hover {

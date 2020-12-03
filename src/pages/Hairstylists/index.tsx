@@ -6,7 +6,18 @@ import { DayModifiers } from 'react-day-picker'
 import Calendar from '../../components/Calendar'
 import api from '../../services/api'
 
-import { Availability, CreateAppointment, Container, HairStylist, Info, ListHairStylists, Name, Title, TimeOptions } from './styles'
+import {
+  Availability,
+  CreateAppointment,
+  Container,
+  HairStylist,
+  Info,
+  ListHairStylists,
+  Name,
+  Title,
+  TimeOptions,
+  Submit, TimeOptionsHour,
+} from './styles'
 
 interface HairStylistProps {
   id: string
@@ -32,12 +43,65 @@ interface MonthAvailabilityItem {
   available: boolean
 }
 
+interface HourAvailabilityProps {
+  hour: number
+  available: boolean
+}
+
+interface HourAvailabilityFormatted {
+  available: boolean
+  hour: string
+}
+
 const Hairstylists: React.FC = () => {
+  const initialHairStylist = {
+    id: 'e0638fcc-fcbb-474d-bee2-c5db5d42c099',
+    name: 'Mell Pereira',
+    email: 'mell.pereira@gmail.com',
+    avatar: 'd131adcc464af8963cad-mell-pereira.jpg',
+    is_hairstylist: true,
+    created_at: '2020-11-04T22:38:53.714Z',
+    updated_at: '2020-11-06T02:32:09.507Z',
+    avatar_url: 'https://lab-gobarber.s3.us-east-2.amazonaws.com/d131adcc464af8963cad-mell-pereira.jpg',
+    hairstylist_profile: {
+      hour_start: '07:00',
+      hour_stop: '18:00',
+      days_available: ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+    },
+    hairstylist_formatted: { hour_start: '7 a.m.', hour_stop: '6 p.m.', days_available: 'Tue, Wed, Thu, Fri, Sat' },
+  }
+
   const [hairStylists, setHairStylists] = useState<HairStylistProps[]>([])
-  const [selectedHairStylist, setSelectedHairStylist] = useState<HairStylistProps | undefined>(undefined)
   const [monthAvailability, setMonthAvailability] = useState<MonthAvailabilityItem[]>([])
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [hourAvailability, setHourAvailability] = useState<HourAvailabilityProps[]>([])
   const [currentMonth, setCurrentMonth] = useState(new Date())
+
+  const [selectedHairStylist, setSelectedHairStylist] = useState<HairStylistProps | undefined>(initialHairStylist)
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [selectedHour, setSelectedHour] = useState<string | undefined>(undefined)
+
+  const handleDayChange = useCallback((day: Date, modifiers: DayModifiers) => {
+    if (modifiers.available && !modifiers.disabled) {
+      setSelectedDate(day)
+
+      const url = `/providers/availability-day/${selectedHairStylist?.id}`
+      const params = {
+        day: day.getDate(),
+        month: currentMonth?.getMonth() + 1,
+        year: currentMonth?.getFullYear(),
+      }
+
+      api.get<HourAvailabilityProps[]>(url, { params })
+        .then(({ data }) => setHourAvailability(data))
+        .catch(console.error)
+    }
+  }, [currentMonth, selectedHairStylist])
+
+  const handleTimeChange = useCallback((time: HourAvailabilityFormatted) => {
+    if (time.available) {
+      setSelectedHour(time.hour)
+    }
+  }, [])
 
   const formatHour = useCallback((h: string) => {
     const date = new Date()
@@ -46,12 +110,6 @@ const Hairstylists: React.FC = () => {
 
     const formatTemplate = Number(minute) > 0 ? 'h:mm bbbb' : 'h bbbb'
     return format(date, formatTemplate)
-  }, [])
-
-  const handleDayChange = useCallback((day: Date, modifiers: DayModifiers) => {
-    if (modifiers.available && !modifiers.disabled) {
-      setSelectedDate(day)
-    }
   }, [])
 
   const disabledDays = useMemo(() => {
@@ -64,6 +122,26 @@ const Hairstylists: React.FC = () => {
 
     return dates
   }, [currentMonth, monthAvailability])
+
+  const morningHours = useMemo(
+    () => hourAvailability
+      .filter((item) => item.hour < 12)
+      .map((item) => ({
+        hour: `${item.hour}:00`.padStart(5, '0'),
+        available: item.available,
+      })),
+    [hourAvailability],
+  )
+
+  const afternoonHours = useMemo(
+    () => hourAvailability
+      .filter((item) => item.hour >= 12)
+      .map((item) => ({
+        hour: `${item.hour}:00`.padStart(5, '0'),
+        available: item.available,
+      })),
+    [hourAvailability],
+  )
 
   useEffect(() => {
     api.get<HairStylistProps[]>('/providers')
@@ -101,6 +179,7 @@ const Hairstylists: React.FC = () => {
     })
       .then(({ data }) => {
         setMonthAvailability(data)
+        document.getElementById('create-appointment')?.scrollIntoView()
       })
       .catch(console.error)
   }, [selectedHairStylist, currentMonth])
@@ -140,7 +219,7 @@ const Hairstylists: React.FC = () => {
       </ListHairStylists>
 
       {selectedHairStylist && (
-        <CreateAppointment>
+        <CreateAppointment id="create-appointment">
           <section>
             <Title>Choose Date</Title>
 
@@ -152,47 +231,52 @@ const Hairstylists: React.FC = () => {
             />
           </section>
 
-          <section>
-            <Title>Choose Time</Title>
+          {selectedDate && (
+            <>
+              <section>
+                <Title>Choose Time</Title>
 
-            <TimeOptions>
-              <h6>Morning</h6>
+                <TimeOptions>
+                  <h6>Morning</h6>
 
-              <li>
-                <ul>07:00</ul>
-                <ul>08:00</ul>
-                <ul>09:00</ul>
-                <ul>10:00</ul>
-                <ul>11:00</ul>
-              </li>
-            </TimeOptions>
+                  <li>
+                    {morningHours.map((time) => (
+                      <TimeOptionsHour
+                        key={time.hour}
+                        available={time.available}
+                        selected={selectedHour === time.hour}
+                        onClick={() => handleTimeChange(time)}
+                      >
+                        {time.hour}
+                      </TimeOptionsHour>
+                    ))}
+                  </li>
+                </TimeOptions>
 
-            <TimeOptions>
-              <h6>Afternoon</h6>
+                <TimeOptions>
+                  <h6>Afternoon</h6>
 
-              <li>
-                <ul>12:00</ul>
-                <ul>13:00</ul>
-                <ul>14:00</ul>
-                <ul>15:00</ul>
-                <ul>16:00</ul>
-                <ul>17:00</ul>
-              </li>
-            </TimeOptions>
+                  <li>
+                    {afternoonHours.map((time) => (
+                      <TimeOptionsHour
+                        key={time.hour}
+                        available={time.available}
+                        selected={selectedHour === time.hour}
+                        onClick={() => handleTimeChange(time)}
+                      >
+                        {time.hour}
+                      </TimeOptionsHour>
+                    ))}
+                  </li>
+                </TimeOptions>
+              </section>
 
-            <TimeOptions>
-              <h6>Night</h6>
+              <Submit type="submit">
+                Make Appointment
+              </Submit>
+            </>
+          )}
 
-              <li>
-                <ul>18:00</ul>
-                <ul>19:00</ul>
-                <ul>20:00</ul>
-                <ul>21:00</ul>
-                <ul>22:00</ul>
-                <ul>23:00</ul>
-              </li>
-            </TimeOptions>
-          </section>
         </CreateAppointment>
       )}
     </Container>

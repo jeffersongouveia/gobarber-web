@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import colors from '../../styles/colors'
 
 export const Container = styled.div`
   position: relative;
@@ -11,7 +12,7 @@ export const Container = styled.div`
     transform: translateX(-50%);
 
     background: #ff9000;
-    color: #312e38;
+    color: ${colors.background};
     padding: 8px;
     border-radius: 4px;
 
