@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiCalendar, FiClock } from 'react-icons/all'
+import { DayModifiers } from 'react-day-picker'
 import { format } from 'date-fns'
 
-import { DayModifiers } from 'react-day-picker'
 import Calendar from '../../components/Calendar'
 import api from '../../services/api'
 
@@ -54,34 +54,18 @@ interface HourAvailabilityFormatted {
 }
 
 const Hairstylists: React.FC = () => {
-  const initialHairStylist = {
-    id: 'e0638fcc-fcbb-474d-bee2-c5db5d42c099',
-    name: 'Mell Pereira',
-    email: 'mell.pereira@gmail.com',
-    avatar: 'd131adcc464af8963cad-mell-pereira.jpg',
-    is_hairstylist: true,
-    created_at: '2020-11-04T22:38:53.714Z',
-    updated_at: '2020-11-06T02:32:09.507Z',
-    avatar_url: 'https://lab-gobarber.s3.us-east-2.amazonaws.com/d131adcc464af8963cad-mell-pereira.jpg',
-    hairstylist_profile: {
-      hour_start: '07:00',
-      hour_stop: '18:00',
-      days_available: ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
-    },
-    hairstylist_formatted: { hour_start: '7 a.m.', hour_stop: '6 p.m.', days_available: 'Tue, Wed, Thu, Fri, Sat' },
-  }
-
   const [hairStylists, setHairStylists] = useState<HairStylistProps[]>([])
   const [monthAvailability, setMonthAvailability] = useState<MonthAvailabilityItem[]>([])
   const [hourAvailability, setHourAvailability] = useState<HourAvailabilityProps[]>([])
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
-  const [selectedHairStylist, setSelectedHairStylist] = useState<HairStylistProps | undefined>(initialHairStylist)
+  const [selectedHairStylist, setSelectedHairStylist] = useState<HairStylistProps | undefined>(undefined)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [selectedHour, setSelectedHour] = useState<string | undefined>(undefined)
 
   const handleDayChange = useCallback((day: Date, modifiers: DayModifiers) => {
     if (modifiers.available && !modifiers.disabled) {
+      setSelectedHour(undefined)
       setSelectedDate(day)
 
       const url = `/providers/availability-day/${selectedHairStylist?.id}`
@@ -102,6 +86,28 @@ const Hairstylists: React.FC = () => {
       setSelectedHour(time.hour)
     }
   }, [])
+
+  const handleMakeAppointment = useCallback(() => {
+    if (!selectedDate || !selectedHour) {
+      return
+    }
+
+    const dateFormatted = format(selectedDate, 'uuuu-MM-dd')
+    const params = {
+      date: `${dateFormatted} ${selectedHour}`,
+      provider_id: selectedHairStylist?.id,
+    }
+
+    api.post('/appointments', params)
+      .then(({ data }) => {
+        console.log(data)
+
+        setSelectedDate(undefined)
+        setSelectedHour(undefined)
+        setSelectedHairStylist(undefined)
+      })
+      .catch(console.error)
+  }, [selectedDate, selectedHour, selectedHairStylist])
 
   const formatHour = useCallback((h: string) => {
     const date = new Date()
@@ -271,7 +277,7 @@ const Hairstylists: React.FC = () => {
                 </TimeOptions>
               </section>
 
-              <Submit type="submit">
+              <Submit type="button" onClick={handleMakeAppointment}>
                 Make Appointment
               </Submit>
             </>
